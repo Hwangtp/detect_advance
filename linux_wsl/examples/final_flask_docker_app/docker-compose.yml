@@ -1,0 +1,6 @@
+services:
+  web:
+    build: .
+    container_name: linux_wsl_web
+    ports:
+      - "5050:5000"
