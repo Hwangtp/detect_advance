@@ -1,28 +1,31 @@
 -- 03.sql: 데이터 업데이트 및 삭제
--- UPDATE와 DELETE 명령어 설명
--- UPDATE: 기존 데이터를 수정합니다.
--- DELETE: 데이터를 삭제합니다.
+-- UPDATE는 기존 데이터를 수정하고, DELETE는 기존 데이터를 삭제합니다.
 
 USE school_db;
+-- 예상 결과: school_db 데이터베이스를 사용합니다.
 
--- 데이터 업데이트: 학생 나이 변경
+-- student_id가 1인 학생의 나이를 21로 수정
 UPDATE students SET age = 21 WHERE student_id = 1;
--- student_id가 1인 학생의 나이를 21로 업데이트합니다.
+-- 예상 결과: Alice의 age 값이 21로 변경됩니다.
 
--- 데이터 업데이트: 여러 컬럼 변경
+-- 이름이 Bob인 학생의 나이와 학년 수정
 UPDATE students SET age = 23, grade = 'A' WHERE name = 'Bob';
+-- 예상 결과: Bob의 age는 23, grade는 A로 변경됩니다.
 
--- 데이터 삭제: 특정 학생 삭제
+-- student_id가 3인 학생 삭제
 DELETE FROM students WHERE student_id = 3;
--- student_id가 3인 학생을 삭제합니다. (주의: 외래키 제약으로 인해 grades 테이블의 관련 데이터도 삭제될 수 있음)
+-- 예상 결과: Charlie 데이터 1행이 삭제됩니다.
 
--- 데이터 삭제: 조건 삭제
+-- 점수가 85 미만인 성적 삭제
 DELETE FROM grades WHERE score < 85;
--- 점수가 85 미만인 성적 데이터를 삭제합니다.
+-- 예상 결과: 현재 예제 데이터 기준으로는 삭제되는 행이 없습니다.
 
--- 조회하여 변경 확인
+-- 변경 결과 확인
 SELECT * FROM students;
+-- 예상 결과: Alice, Bob 2행만 조회됩니다.
+
 SELECT * FROM grades;
+-- 예상 결과: 95.5, 88.0, 92.0 점수 3행이 그대로 조회됩니다.
 
 -- 실습: subjects 테이블에 새로운 과목 'History'를 추가하고, 다시 조회하세요.
 -- INSERT INTO subjects (subject_name) VALUES ('History');

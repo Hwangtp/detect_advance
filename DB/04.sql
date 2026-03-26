@@ -1,29 +1,29 @@
 -- 04.sql: 조인 (JOIN)
--- 조인은 여러 테이블을 연결하여 데이터를 조회하는 방법입니다.
--- INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN, SELF JOIN, CROSS JOIN 등이 있습니다.
+-- 조인은 여러 테이블을 연결하여 관련 데이터를 함께 조회하는 방법입니다.
 
 USE school_db;
+-- 예상 결과: school_db 데이터베이스를 사용합니다.
 
--- INNER JOIN: 두 테이블의 공통 데이터만 조회
+-- INNER JOIN: 공통으로 연결되는 데이터만 조회
 SELECT s.name, sub.subject_name, g.score
 FROM students s
 INNER JOIN grades g ON s.student_id = g.student_id
 INNER JOIN subjects sub ON g.subject_id = sub.subject_id;
--- 학생 이름, 과목 이름, 점수를 INNER JOIN으로 조회합니다.
+-- 예상 결과: Alice-Math-95.5, Alice-English-88.0, Bob-Math-92.0 총 3행이 조회됩니다.
 
--- LEFT JOIN: 왼쪽 테이블의 모든 데이터와 오른쪽 테이블의 매칭 데이터
+-- LEFT JOIN: 왼쪽 테이블 기준으로 모두 조회
 SELECT s.name, g.score
 FROM students s
 LEFT JOIN grades g ON s.student_id = g.student_id;
--- 학생 이름과 점수를 LEFT JOIN으로 조회합니다. 점수가 없는 학생도 포함됩니다.
+-- 예상 결과: 현재 예제 데이터 기준으로 Alice 2행, Bob 1행 총 3행이 조회됩니다.
 
--- RIGHT JOIN: 오른쪽 테이블의 모든 데이터와 왼쪽 테이블의 매칭 데이터
+-- RIGHT JOIN: 오른쪽 테이블 기준으로 모두 조회
 SELECT sub.subject_name, g.score
 FROM grades g
 RIGHT JOIN subjects sub ON g.subject_id = sub.subject_id;
--- 과목 이름과 점수를 RIGHT JOIN으로 조회합니다. 점수가 없는 과목도 포함됩니다.
+-- 예상 결과: Math 2행, English 1행, Science NULL 1행으로 총 4행이 조회됩니다.
 
--- FULL OUTER JOIN: MySQL에서는 UNION으로 시뮬레이션
+-- FULL OUTER JOIN 시뮬레이션: UNION 사용
 SELECT s.name, g.score
 FROM students s
 LEFT JOIN grades g ON s.student_id = g.student_id
@@ -31,35 +31,35 @@ UNION
 SELECT s.name, g.score
 FROM students s
 RIGHT JOIN grades g ON s.student_id = g.student_id;
--- 모든 학생과 점수를 FULL OUTER JOIN으로 조회합니다.
+-- 예상 결과: 현재 예제 데이터 기준으로 Alice 2행, Bob 1행 총 3행이 조회됩니다.
 
--- SELF JOIN: 같은 테이블 내에서 조인 (예: 친구 관계 테이블이 있다고 가정)
--- 예를 위해 임시 테이블 생성 (실제로는 별도 테이블)
+-- SELF JOIN 설명용 임시 테이블 생성
 CREATE TEMPORARY TABLE friendships (
     friend1_id INT,
     friend2_id INT
 );
+-- 예상 결과: friendships 임시 테이블이 생성됩니다.
+
 INSERT INTO friendships VALUES (1, 2), (2, 3);
+-- 예상 결과: friendships에 2행이 추가됩니다.
+
 SELECT f1.name AS friend1, f2.name AS friend2
 FROM friendships fr
 JOIN students f1 ON fr.friend1_id = f1.student_id
 JOIN students f2 ON fr.friend2_id = f2.student_id;
--- SELF JOIN 예시: 친구 관계 조회.
+-- 예상 결과: 현재 예제 데이터 기준으로 Alice-Bob 1행이 조회됩니다.
 
--- CROSS JOIN: 모든 조합 생성 (카테시안 곱)
+-- CROSS JOIN: 모든 조합 생성
 SELECT s.name, sub.subject_name
 FROM students s
 CROSS JOIN subjects sub;
--- 학생과 과목의 모든 조합을 CROSS JOIN으로 조회합니다.
+-- 예상 결과: 학생 2명 x 과목 3개 = 총 6행이 조회됩니다.
 
--- NATURAL JOIN: 같은 이름의 컬럼으로 자동 조인 (주의: 컬럼 이름이 같아야 함)
--- 예: 컬럼 이름이 같다면 NATURAL JOIN 사용 가능하지만, 여기서는 생략.
-
--- 조인 조건 예시: ON vs USING
--- ON: 명시적 조건
-SELECT s.name, g.score FROM students s JOIN grades g ON s.student_id = g.student_id;
--- USING: 같은 이름 컬럼
--- SELECT name, score FROM students JOIN grades USING (student_id);  -- 컬럼 이름이 student_id로 같아야 함
+-- ON을 사용한 조인 조건 명시
+SELECT s.name, g.score
+FROM students s
+JOIN grades g ON s.student_id = g.student_id;
+-- 예상 결과: Alice 2행, Bob 1행 총 3행이 조회됩니다.
 
 -- 실습 1: 학생과 과목을 INNER JOIN하여 이름과 과목명을 조회하세요.
 -- SELECT s.name, sub.subject_name FROM students s INNER JOIN grades g ON s.student_id = g.student_id INNER JOIN subjects sub ON g.subject_id = sub.subject_id;
